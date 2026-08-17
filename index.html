@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>张三 · 个人主页</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fafafa;
+      --card: #ffffff;
+      --ink: #17181c;
+      --muted: #6b7078;
+      --line: #e7e8ea;
+      --primary: #4f46e5;
+      --primary-soft: #eef2ff;
+      --accent: #0ea5e9;
+      --warm: #f59e0b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: "Inter", "Noto Sans SC", -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection { background: var(--primary); color: #fff; }
+
+    /* ===== 导航 ===== */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: .8rem 5%;
+      background: rgba(255,255,255,.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+    .logo {
+      font-weight: 800;
+      font-size: 1.05rem;
+      text-decoration: none;
+      color: var(--ink);
+      letter-spacing: -.01em;
+    }
+    .logo em { font-style: normal; color: var(--primary); }
+    nav ul { display: flex; list-style: none; gap: 1.6rem; }
+    nav ul a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: .88rem;
+      font-weight: 500;
+      transition: color .25s;
+    }
+    nav ul a:hover { color: var(--ink); }
+    nav ul a.cta-mini {
+      background: var(--ink);
+      color: #fff;
+      padding: .45rem 1.1rem;
+      border-radius: 50px;
+    }
+    nav ul a.cta-mini:hover { background: var(--primary); }
+
+    /* ===== 通用 ===== */
+    section { padding: 6rem 5%; }
+    .container { max-width: 1080px; margin: 0 auto; }
+
+    .kicker {
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: .8rem;
+    }
+    h2.title {
+      font-size: clamp(1.9rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -.02em;
+      line-height: 1.15;
+      margin-bottom: .9rem;
+    }
+    .lead { color: var(--muted); max-width: 620px; font-size: 1.02rem; }
+
+    /* ===== HERO ===== */
+    .hero {
+      padding: 5rem 5% 4rem;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .hero .avatar-side { display: flex; justify-content: center; }
+    .hero .avatar {
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 6px solid #fff;
+      box-shadow: 0 20px 50px rgba(23,24,28,.14);
+    }
+    .hero .greet { font-size: 1rem; color: var(--muted); margin-bottom: .4rem; }
+    .hero h1 {
+      font-size: clamp(2.4rem, 5.5vw, 4rem);
+      font-weight: 900;
+      letter-spacing: -.03em;
+      line-height: 1.05;
+      margin-bottom: 1rem;
+    }
+    .hero h1 .name { background: linear-gradient(120deg, var(--primary), var(--accent)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero .role {
+      display: inline-block;
+      font-weight: 700;
+      font-size: 1.02rem;
+      color: var(--primary);
+      background: var(--primary-soft);
+      padding: .35rem 1rem;
+      border-radius: 50px;
+      margin-bottom: 1.2rem;
+    }
+    .hero .one-liner { color: var(--muted); font-size: 1.05rem; max-width: 480px; margin-bottom: 1.4rem; }
+
+    .values { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 1.8rem; }
+    .value {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 50px;
+      padding: .4rem 1rem;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .value b { color: var(--primary); font-weight: 700; }
+
+    .kw-row { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 2rem; }
+    .kw {
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: .35rem .9rem;
+      border-radius: 8px;
+      font-size: .82rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .85rem 1.6rem;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: .95rem;
+      transition: transform .2s, box-shadow .2s, background .2s;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: #4338ca; transform: translateY(-2px); box-shadow: 0 12px 24px rgba(79,70,229,.3); }
+    .btn-outline { background: #fff; color: var(--ink); border: 1.5px solid var(--line); }
+    .btn-outline:hover { border-color: var(--ink); transform: translateY(-2px); }
+
+    /* ===== 教育 ===== */
+    #education { background: #fff; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .edu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.4rem; margin-top: 2.5rem; }
+    .edu-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 1.8rem;
+      background: var(--bg);
+      transition: transform .25s, box-shadow .25s;
+    }
+    .edu-card:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(23,24,28,.08); }
+    .edu-card .school { font-weight: 800; font-size: 1.15rem; margin-bottom: .2rem; }
+    .edu-card .meta { font-size: .85rem; color: var(--muted); margin-bottom: 1rem; }
+    .edu-card ul { list-style: none; }
+    .edu-card li { font-size: .92rem; color: var(--muted); padding-left: 1.2rem; position: relative; margin-bottom: .45rem; }
+    .edu-card li::before { content: "▹"; position: absolute; left: 0; color: var(--primary); font-weight: 700; }
+    .edu-card li b { color: var(--ink); }
+
+    /* ===== 经历时间轴 ===== */
+    .timeline { margin-top: 2.8rem; position: relative; padding-left: 2.2rem; }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 8px; top: 6px; bottom: 6px;
+      width: 2px;
+      background: var(--line);
+    }
+    .tl { position: relative; margin-bottom: 2.4rem; }
+    .tl:last-child { margin-bottom: 0; }
+    .tl::before {
+      content: "";
+      position: absolute;
+      left: -2.2rem; top: 6px;
+      width: 15px; height: 15px;
+      border-radius: 50%;
+      background: #fff;
+      border: 4px solid var(--primary);
+    }
+    .tl .period { font-size: .82rem; font-weight: 700; color: var(--primary); letter-spacing: .04em; }
+    .tl h3 { font-size: 1.2rem; font-weight: 800; margin: .2rem 0 .4rem; }
+    .tl .company { font-size: .9rem; color: var(--muted); margin-bottom: .5rem; }
+    .tl p { font-size: .95rem; color: var(--muted); }
+    .tl p b { color: var(--ink); font-weight: 700; }
+
+    /* ===== 项目 ===== */
+    #projects { background: #fff; border-top: 1px solid var(--line); }
+    .proj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.4rem; margin-top: 2.5rem; }
+    .proj {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--bg);
+      transition: transform .25s, box-shadow .25s;
+    }
+    .proj:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(23,24,28,.08); }
+    .proj .cover {
+      height: 150px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3rem;
+    }
+    .proj .body { padding: 1.5rem; }
+    .proj h3 { font-size: 1.15rem; font-weight: 800; margin-bottom: .5rem; }
+    .proj p { font-size: .92rem; color: var(--muted); margin-bottom: 1rem; }
+    .proj .tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .proj .tags span {
+      font-size: .76rem;
+      font-weight: 600;
+      background: var(--primary-soft);
+      color: var(--primary);
+      padding: .22rem .75rem;
+      border-radius: 50px;
+    }
+    .proj .more {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      margin-top: .85rem;
+      font-size: .88rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      transition: gap .2s;
+    }
+    .proj .more:hover { gap: .6rem; }
+    .c1 { background: linear-gradient(135deg, #e0e7ff, #c7d2fe); }
+    .c2 { background: linear-gradient(135deg, #dbeafe, #bfdbfe); }
+    .c3 { background: linear-gradient(135deg, #dcfce7, #bbf7d0); }
+    .c4 { background: linear-gradient(135deg, #fef3c7, #fde68a); }
+    .c5 { background: linear-gradient(135deg, #fce7f3, #fbcfe8); }
+    .c6 { background: linear-gradient(135deg, #e0f2fe, #bae6fd); }
+
+    /* ===== 技能 ===== */
+    .skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.4rem; margin-top: 2.5rem; }
+    .skill {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 1.8rem;
+      transition: transform .25s, border-color .25s;
+    }
+    .skill:hover { transform: translateY(-4px); border-color: var(--primary); }
+    .skill .num {
+      font-size: .78rem;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: .12em;
+      margin-bottom: .6rem;
+    }
+    .skill h3 { font-size: 1.12rem; font-weight: 800; margin-bottom: .5rem; }
+    .skill p { font-size: .9rem; color: var(--muted); }
+
+    /* ===== 兴趣爱好 ===== */
+    #hobbies { background: #fff; border-top: 1px solid var(--line); overflow: hidden; }
+    .carousel { margin-top: 2.5rem; overflow: hidden; position: relative; }
+    .carousel-track {
+      display: flex;
+      gap: 1.2rem;
+      width: max-content;
+      animation: scroll-x 26s linear infinite;
+    }
+    .carousel:hover .carousel-track { animation-play-state: paused; }
+    .hobby {
+      width: 240px;
+      height: 300px;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+    }
+    .hobby .cap {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 1.8rem 1rem .9rem;
+      background: linear-gradient(transparent, rgba(0,0,0,.55));
+      color: #fff;
+      font-size: .9rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    /* ===== 页脚 ===== */
+    footer {
+      background: var(--ink);
+      color: #b9bec6;
+      text-align: center;
+      padding: 3rem 5%;
+    }
+    footer .big { font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: .6rem; }
+    footer .mail { color: #fff; }
+    footer a { color: #b9bec6; }
+
+    /* ===== 动画 ===== */
+    @keyframes scroll-x { to { transform: translateX(-50%); } }
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 800px) {
+      .hero { grid-template-columns: 1fr; gap: 2.5rem; }
+      .hero .avatar { width: 220px; height: 220px; }
+      nav ul { gap: 1rem; }
+      nav ul a.cta-mini { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 导航 -->
+  <nav>
+    <a href="#" class="logo">张<em>三</em> · Portfolio</a>
+    <ul>
+      <li><a href="#education">教育</a></li>
+      <li><a href="#experience">经历</a></li>
+      <li><a href="#projects">项目</a></li>
+      <li><a href="#skills">技能</a></li>
+      <li><a href="#hobbies">兴趣</a></li>
+      <li><a href="#" class="cta-mini">下载简历</a></li>
+    </ul>
+  </nav>
+
+  <!-- ① 首页 -->
+  <header class="hero">
+    <div>
+      <p class="greet">Hi，我是</p>
+      <h1><span class="name">张三</span></h1>
+      <span class="role">产品经理 / 全栈开发</span>
+      <p class="one-liner">「用理性拆解问题，用感性创造体验。」</p>
+      <div class="values">
+        <span class="value"><b>✦</b> 用户第一</span>
+        <span class="value"><b>✦</b> 长期主义</span>
+        <span class="value"><b>✦</b> 持续学习</span>
+      </div>
+      <div class="kw-row">
+        <span class="kw">需求洞察</span>
+        <span class="kw">数据分析</span>
+        <span class="kw">用户体验</span>
+        <span class="kw">跨团队协作</span>
+        <span class="kw">AIGC 应用</span>
+      </div>
+      <div class="hero-actions">
+        <a href="#" class="btn btn-primary">📄 下载简历</a>
+        <a href="#projects" class="btn btn-outline">查看作品</a>
+      </div>
+    </div>
+    <div class="avatar-side">
+      <img class="avatar" src="avatar.jpg" alt="张三的头像">
+    </div>
+  </header>
+
+  <!-- ② 教育背景 -->
+  <section id="education">
+    <div class="container">
+      <div class="reveal">
+        <p class="kicker">Education</p>
+        <h2 class="title">教育背景</h2>
+        <p class="lead">扎实的理论基础，加上持续不断的实践探索。</p>
+      </div>
+      <div class="edu-grid">
+        <div class="edu-card reveal">
+          <div class="school">XX 大学</div>
+          <div class="meta">硕士 · 工商管理 · 2020 — 2023</div>
+          <ul>
+            <li>研究方向：<b>产品创新与用户研究</b></li>
+            <li>研究生一等学业奖学金</li>
+            <li>校级优秀毕业生</li>
+          </ul>
+        </div>
+        <div class="edu-card reveal">
+          <div class="school">XX 大学</div>
+          <div class="meta">本科 · 信息管理与信息系统 · 2016 — 2020</div>
+          <ul>
+            <li>主修课程：数据结构、数据库、<b>人机交互</b></li>
+            <li>担任校学生会宣传部部长</li>
+            <li>获全国大学生创新创业大赛 <b>国家级立项</b></li>
+          </ul>
+        </div>
+        <div class="edu-card reveal">
+          <div class="school">其他证书与培训</div>
+          <div class="meta">持续学习</div>
+          <ul>
+            <li>PMP 项目管理专业人士认证</li>
+            <li>Google UX Design 证书</li>
+            <li>雅思 7.0 / CET-6</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ③ 工作经历 -->
+  <section id="experience">
+    <div class="container">
+      <div class="reveal">
+        <p class="kicker">Experience</p>
+        <h2 class="title">工作经历</h2>
+        <p class="lead">每一段经历，都在积累对业务和用户的理解。</p>
+      </div>
+      <div class="timeline">
+        <div class="tl reveal">
+          <div class="period">2023.06 — 至今</div>
+          <h3>产品经理</h3>
+          <div class="company">XX 科技 · 互联网</div>
+          <p>负责核心产品的需求规划与落地，主导 3 个从 0 到 1 的项目；通过<strong>数据驱动迭代</strong>，将核心功能转化率<strong>提升 35%</strong>；协调设计、研发、运营跨团队协作，保障项目按期交付。</p>
+        </div>
+        <div class="tl reveal">
+          <div class="period">2021.06 — 2023.05</div>
+          <h3>产品实习生 → 产品助理</h3>
+          <div class="company">XX 互联网 · 电商</div>
+          <p>深度参与用户调研与竞品分析，输出 10+ 份研究报告；负责活动页面策划，<strong>GMV 提升 20%</strong>；建立埋点与看板体系，推动<strong>精细化运营</strong>落地。</p>
+        </div>
+        <div class="tl reveal">
+          <div class="period">2020.06 — 2021.05</div>
+          <h3>运营实习生</h3>
+          <div class="company">XX 传媒 · 内容社区</div>
+          <p>负责社区内容运营与用户增长，策划多场线上活动，<strong>单场活动拉新 1w+</strong>；通过内容策划将用户活跃度<strong>提升 25%</strong>。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ④ 项目展示 -->
+  <section id="projects">
+    <div class="container">
+      <div class="reveal">
+        <p class="kicker">Projects</p>
+        <h2 class="title">项目展示</h2>
+        <p class="lead">从洞察到落地，做有用户价值的作品。</p>
+      </div>
+      <div class="proj-grid">
+        <div class="proj reveal">
+          <div class="cover c1">📰</div>
+          <div class="body">
+            <h3>微信公众号文章</h3>
+            <p>SecondMe为什么成不了AI时代的Facebook</p>
+            <a class="more" href="https://mp.weixin.qq.com/s/O5vap9Hs1bYJkI-_eEfsPw" target="_blank" rel="noopener">了解更多 →</a>
+          </div>
+        </div>
+        <div class="proj reveal">
+          <div class="cover c2">🤖</div>
+          <div class="body">
+            <h3>AI 智能客服助手</h3>
+            <p>基于大模型搭建客服机器人，人工咨询量下降 40%。</p>
+            <div class="tags"><span>AIGC</span><span>Prompt 工程</span><span>降本增效</span></div>
+            <a class="more" href="#" target="_blank" rel="noopener">了解更多 →</a>
+          </div>
+        </div>
+        <div class="proj reveal">
+          <div class="cover c3">📊</div>
+          <div class="body">
+            <h3>数据可视化看板</h3>
+            <p>搭建核心指标看板，让业务数据一目了然、决策有据。</p>
+            <div class="tags"><span>数据分析</span><span>可视化</span><span>指标体系</span></div>
+            <a class="more" href="#" target="_blank" rel="noopener">了解更多 →</a>
+          </div>
+        </div>
+        <div class="proj reveal">
+          <div class="cover c4">📱</div>
+          <div class="body">
+            <h3>移动端 App 改版</h3>
+            <p>重构信息架构与交互流程，用户留存率提升 18%。</p>
+            <div class="tags"><span>交互设计</span><span>用户体验</span><span>Figma</span></div>
+            <a class="more" href="#" target="_blank" rel="noopener">了解更多 →</a>
+          </div>
+        </div>
+        <div class="proj reveal">
+          <div class="cover c5">📝</div>
+          <div class="body">
+            <h3>小红书内容创作</h3>
+            <p>运营个人账号，分享产品与 AI 相关内容，累计粉丝 1w+。</p>
+            <div class="tags"><span>内容策划</span><span>个人品牌</span></div>
+            <a class="more" href="#" target="_blank" rel="noopener">了解更多 →</a>
+          </div>
+        </div>
+        <div class="proj reveal">
+          <div class="cover c6">🌐</div>
+          <div class="body">
+            <h3>个人网站（本项目）</h3>
+            <p>用 AI 从 0 到 1 搭建的个人主页，展示经历、项目与作品。</p>
+            <div class="tags"><span>Vibe Coding</span><span>HTML/CSS</span></div>
+            <a class="more" href="#" target="_blank" rel="noopener">了解更多 →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑤ 技能特长 -->
+  <section id="skills">
+    <div class="container">
+      <div class="reveal">
+        <p class="kicker">Skills</p>
+        <h2 class="title">技能特长</h2>
+        <p class="lead">基于过往经历凝练出的四大核心能力。</p>
+      </div>
+      <div class="skill-grid">
+        <div class="skill reveal">
+          <div class="num">01 · 产品能力</div>
+          <h3>需求洞察与产品设计</h3>
+          <p>擅长用户调研、需求分析、原型设计与 PRD 撰写，能独立推动产品从 0 到 1。</p>
+        </div>
+        <div class="skill reveal">
+          <div class="num">02 · 数据能力</div>
+          <h3>数据分析与增长</h3>
+          <p>熟练使用 SQL、Excel、埋点与看板工具，用数据驱动决策与增长。</p>
+        </div>
+        <div class="skill reveal">
+          <div class="num">03 · 技术能力</div>
+          <h3>AI 应用与开发</h3>
+          <p>掌握 HTML/CSS/JS 基础，熟悉 AIGC 工具链与 Prompt 工程，能快速落地想法。</p>
+        </div>
+        <div class="skill reveal">
+          <div class="num">04 · 协作能力</div>
+          <h3>跨团队沟通与项目管理</h3>
+          <p>具备 PMP 认证，善于协调多方资源，保障项目按时高质量交付。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑥ 兴趣爱好 -->
+  <section id="hobbies">
+    <div class="container">
+      <div class="reveal">
+        <p class="kicker">Hobbies</p>
+        <h2 class="title">兴趣爱好</h2>
+        <p class="lead">工作之外的我，也在认真生活～（悬停可暂停滚动）</p>
+      </div>
+    </div>
+    <div class="carousel">
+      <div class="carousel-track">
+        <div class="hobby" style="background:linear-gradient(135deg,#fbcfe8,#f9a8d4);"><span>📷</span><div class="cap">摄影</div></div>
+        <div class="hobby" style="background:linear-gradient(135deg,#bfdbfe,#93c5fd);"><span>✈️</span><div class="cap">旅行</div></div>
+        <div class="hobby" style="background:linear-gradient(135deg,#bbf7d0,#86efac);"><span>🍳</span><div class="cap">做饭</div></div>
+        <div class="hobby" style="background:linear-gradient(135deg,#fde68a,#fcd34d);"><span>🎨</span><div class="cap">画画</div></div>
+        <div class="hobby" style="background:linear-gradient(135deg,#ddd6fe,#c4b5fd);"><span>📚</span><div class="cap">阅读</div></div>
+        <div class="hobby" style="background:linear-gradient(135deg,#fecdd3,#fda4af);"><span>🏃</span><div class="cap">运动</div></div>
+        <div class="hobby" style="background:linear-gradient(135deg,#a5f3fc,#67e8f9);"><span>🎵</span><div class="cap">音乐</div></div>
+        <div class="hobby" style="background:linear-gradient(135deg,#fbcfe8,#f9a8d4);"><span>📷</span><div class="cap">摄影</div></div>
+        <div class="hobby" style="background:linear-gradient(135deg,#bfdbfe,#93c5fd);"><span>✈️</span><div class="cap">旅行</div></div>
+        <div class="hobby" style="background:linear-gradient(135deg,#bbf7d0,#86efac);"><span>🍳</span><div class="cap">做饭</div></div>
+        <div class="hobby" style="background:linear-gradient(135deg,#fde68a,#fcd34d);"><span>🎨</span><div class="cap">画画</div></div>
+        <div class="hobby" style="background:linear-gradient(135deg,#ddd6fe,#c4b5fd);"><span>📚</span><div class="cap">阅读</div></div>
+        <div class="hobby" style="background:linear-gradient(135deg,#fecdd3,#fda4af);"><span>🏃</span><div class="cap">运动</div></div>
+        <div class="hobby" style="background:linear-gradient(135deg,#a5f3fc,#67e8f9);"><span>🎵</span><div class="cap">音乐</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer>
+    <div class="big">很高兴认识你 👋</div>
+    <p style="margin-bottom:.5rem;">想聊聊合作或机会？欢迎联系我：</p>
+    <p><a class="mail" href="mailto:your-email@example.com">your-email@example.com</a></p>
+    <p style="margin-top:1.5rem;font-size:.82rem;">© 2025 张三 · 用心打造的个人主页</p>
+  </footer>
+
+  <script>
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
+</body>
+</html>
